@@ -52,6 +52,13 @@ public class TreasureHunter {
         String hard = SCANNER.nextLine().toLowerCase();
         if (hard.equals("y")) {
             hardMode = true;
+        } else if (hard.equals("test")) {
+            hunter.changeGold(100);
+            hunter.addItems("water");
+            hunter.addItems("rope");
+            hunter.addItems("machete");
+            hunter.addItems("horse");
+            hunter.addItems("boat");
         }
     }
 
@@ -133,5 +140,5 @@ public class TreasureHunter {
             System.out.println("Yikes! That's an invalid option! Try again.");
         }
     }
-    
+
 }

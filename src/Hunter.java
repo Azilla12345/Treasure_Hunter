@@ -89,6 +89,10 @@ public class Hunter {
         }
     }
 
+    public void addItems(String item) {
+        addItem(item);
+    }
+
     /**
      * Checks to make sure that the item is not already in the kit.
      * If not, it assigns the item to an index in the kit with a null value ("empty" position).
