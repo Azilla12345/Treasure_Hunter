@@ -140,7 +140,8 @@ public class TreasureHunter {
         } else if (choice.equals("h")) {
             currentTown.huntForTreasure();
             if (currentTown.isGameOver()) {
-
+                System.out.println("Game Over!");
+                System.exit(0);
             }
         }
         else if (choice.equals("x")) {
