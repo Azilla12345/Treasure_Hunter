@@ -14,6 +14,7 @@ public class Town {
     private String treasure;
     boolean searched = false;
     boolean gameOver = false;
+    boolean easy = false;
 
 
     /**
@@ -78,9 +79,11 @@ public class Town {
         if (canLeaveTown) {
             String item = terrain.getNeededItem();
             printMessage = "You used your " + item + " to cross the " + Colors.CYAN + terrain.getTerrainName() + Colors.RESET + ".";
-            if (checkItemBreak()) {
-                hunter.removeItemFromKit(item);
-                printMessage += "\nUnfortunately, you lost your " + item;
+            if (!(easy)) {
+                if (checkItemBreak()) {
+                    hunter.removeItemFromKit(item);
+                    printMessage += "\nUnfortunately, you lost your " + item;
+                }
             }
 
             return true;
