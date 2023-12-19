@@ -16,6 +16,7 @@ public class TreasureHunter {
     private Town currentTown;
     private Hunter hunter;
     private boolean hardMode;
+    public boolean easyMode;
 
     /**
      * Constructs the Treasure Hunter game.
@@ -25,6 +26,7 @@ public class TreasureHunter {
         currentTown = null;
         hunter = null;
         hardMode = false;
+        easyMode = false;
     }
 
     /**
@@ -48,9 +50,9 @@ public class TreasureHunter {
         // set hunter instance variable
         hunter = new Hunter(name, 10);
 
-        System.out.print("Hard mode? (y/n): ");
+        System.out.print("easy, normal, or hard?(e/n/h): ");
         String hard = SCANNER.nextLine().toLowerCase();
-        if (hard.equals("y")) {
+        if (hard.equals("h")) {
             hardMode = true;
         } else if (hard.equals("test")) {
             hunter.changeGold(100);
@@ -59,8 +61,9 @@ public class TreasureHunter {
             hunter.addItems("machete");
             hunter.addItems("horse");
             hunter.addItems("boat");
-            hunter.addItems("boots");
-            hunter.addItems("shovel");
+        }
+        else if (hard.equals("e")) {
+            easyMode = true;
         }
     }
 
@@ -76,6 +79,12 @@ public class TreasureHunter {
 
             // and the town is "tougher"
             toughness = 0.75;
+        }
+        if (easyMode) {
+            hunter.changeGold(10);
+            markdown = 0;
+            toughness = 0.1;
+            currentTown.easy = true;
         }
 
         // note that we don't need to access the Shop object
@@ -107,13 +116,15 @@ public class TreasureHunter {
             System.out.println();
             System.out.println(currentTown.getLatestNews());
             System.out.println("***");
-            System.out.println(hunter);
             System.out.println(currentTown);
+            System.out.println(hunter.getHunterName() + " has " + hunter.getGold() + " gold and " + hunter.getInventory());
+            System.out.println("Treasures found: " + hunter.getTreasure());
+            System.out.println("This little town is surround by " + currentTown.getTerrain());
             System.out.println("(B)uy something at the shop.");
             System.out.println("(S)ell something at the shop.");
             System.out.println("(M)ove on to a different town.");
             System.out.println("(L)ook for trouble!");
-            System.out.println("(D)ig up treasure!");
+            System.out.println("(H)unt for treasure!");
             System.out.println("Give up the hunt and e(X)it.");
             System.out.println();
             System.out.print("What's your next move? ");
@@ -137,10 +148,15 @@ public class TreasureHunter {
             }
         } else if (choice.equals("l")) {
             currentTown.lookForTrouble();
-        } else if (choice.equals("x")) {
+        } else if (choice.equals("h")) {
+            currentTown.huntForTreasure();
+            if (currentTown.isGameOver()) {
+                System.out.println("Game Over!");
+                System.exit(0);
+            }
+        }
+        else if (choice.equals("x")) {
             System.out.println("Fare thee well, " + hunter.getHunterName() + "!");
-        } else if (choice.equals("d")) {
-            currentTown.digForGold();
         } else {
             System.out.println("Yikes! That's an invalid option! Try again.");
         }

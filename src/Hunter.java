@@ -27,6 +27,10 @@ public class Hunter {
         return hunterName;
     }
 
+    public int getGold() {
+        return gold;
+    }
+
     /**
      * Updates the amount of gold the hunter has.
      *
@@ -205,5 +209,20 @@ public class Hunter {
         return -1;
     }
 
-
+    public String getTreasure() {
+        String treasures = "";
+        if (hasItemInKit("crown")) {
+            treasures += "a crown";
+        }
+        if (hasItemInKit("trophy")) {
+            treasures += "a trophy";
+        }
+        if (hasItemInKit("gem")) {
+            treasures += "a gem";
+        }
+        if (!(hasItemInKit("crown")||hasItemInKit("trophy")||hasItemInKit("gem"))) {
+            treasures += "none";
+        }
+        return treasures;
+    }
 }

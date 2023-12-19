@@ -11,8 +11,11 @@ public class Town {
     private Terrain terrain;
     private String printMessage;
     private boolean toughTown;
+    private String treasure;
+    boolean searched = false;
+    boolean gameOver = false;
+    boolean easy = false;
 
-    private boolean dugForGold;
 
     /**
      * The Town Constructor takes in a shop and the surrounding terrain, but leaves the hunter as null until one arrives.
@@ -23,6 +26,8 @@ public class Town {
     public Town(Shop shop, double toughness) {
         this.shop = shop;
         this.terrain = getNewTerrain();
+        searched = false;
+
 
         // the hunter gets set using the hunterArrives method, which
         // gets called from a client class
@@ -32,7 +37,6 @@ public class Town {
 
         // higher toughness = more likely to be a tough town
         toughTown = (Math.random() < toughness);
-        dugForGold = false;
     }
 
     public String getLatestNews() {
@@ -47,6 +51,16 @@ public class Town {
     public void hunterArrives(Hunter hunter) {
         this.hunter = hunter;
         printMessage = "Welcome to town, " + hunter.getHunterName() + ".";
+        int i = (int)((Math.random() *4));
+        if (i == 1) {
+            treasure = "crown";
+        } else if (i == 2) {
+            treasure = "trophy";
+        } else if (i == 3) {
+            treasure = "gem";
+        } else {
+            treasure = "dust";
+        }
 
         if (toughTown) {
             printMessage += "\nIt's pretty rough around here, so watch yourself.";
@@ -65,9 +79,11 @@ public class Town {
         if (canLeaveTown) {
             String item = terrain.getNeededItem();
             printMessage = "You used your " + item + " to cross the " + Colors.CYAN + terrain.getTerrainName() + Colors.RESET + ".";
-            if (checkItemBreak()) {
-                hunter.removeItemFromKit(item);
-                printMessage += "\nUnfortunately, you lost your " + item;
+            if (!(easy)) {
+                if (checkItemBreak()) {
+                    hunter.removeItemFromKit(item);
+                    printMessage += "\nUnfortunately, you lost your " + item;
+                }
             }
 
             return true;
@@ -121,6 +137,26 @@ public class Town {
         return "This nice little town is surrounded by " + Colors.CYAN + terrain.getTerrainName() + Colors.RESET + ".";
     }
 
+    public void huntForTreasure() {
+        if (!(searched)) {
+            System.out.println("You found a " + treasure);
+            if (!(hunter.hasItemInKit(treasure))) {
+                if (!(treasure.equals("dust"))) {
+                    hunter.addItems(treasure);
+                    if (hunter.hasItemInKit("crown") && (hunter.hasItemInKit("trophy") && (hunter.hasItemInKit("gem")))) {
+                        System.out.println("Congratulations, you have found the last of the three treasures, you win!");
+                        gameOver = true;
+                    }
+                }
+            } else {
+                System.out.println("you have already collected this item.  ");
+            }
+            searched = true;
+        } else {
+            System.out.println("You have already searched this town");
+        }
+    }
+
     /**
      * Determines the surrounding terrain for a town, and the item needed in order to cross that terrain.
      *
@@ -143,6 +179,9 @@ public class Town {
         }
 
     }
+    public Terrain getTerrain() {
+        return terrain;
+    }
 
     /**
      * Determines whether a used item has broken.
@@ -153,23 +192,7 @@ public class Town {
         double rand = Math.random();
         return (rand < 0.5);
     }
-
-    public void digForGold () {
-        if (dugForGold) {
-            System.out.println("You cannot dig for gold!");
-        }
-        else if (!hunter.hasItemInKit("shovel")) {
-            System.out.println("You cannot dig without a shovel!");
-        } else {
-            int coins = (int) (Math.random() * 20) + 1;
-            int chance = (int) (Math.random() * 2) + 1;
-            if (chance < 2) {
-                System.out.println("You found dust!");
-            } else {
-                System.out.println("You found " + coins + " gold!");
-                hunter.changeGold(coins);
-                dugForGold = true;
-            }
-        }
+    public boolean isGameOver() {
+        return gameOver;
     }
 }
