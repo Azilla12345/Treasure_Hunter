@@ -13,6 +13,7 @@ public class Town {
     private boolean toughTown;
     private String treasure;
     boolean searched = false;
+    boolean gameOver = false;
 
 
     /**
@@ -139,6 +140,10 @@ public class Town {
             if (!(hunter.hasItemInKit(treasure))) {
                 if (!(treasure.equals("dust"))) {
                     hunter.addItems(treasure);
+                    if (hunter.hasItemInKit("crown") && (hunter.hasItemInKit("trophy") && (hunter.hasItemInKit("gem")))) {
+                        System.out.println("Congratulations, you have found the last of the three treasures, you win!");
+                        gameOver = true;
+                    }
                 }
             } else {
                 System.out.println("you have already collected this item.  ");
@@ -171,6 +176,9 @@ public class Town {
         }
 
     }
+    public Terrain getTerrain() {
+        return terrain;
+    }
 
     /**
      * Determines whether a used item has broken.
@@ -180,5 +188,8 @@ public class Town {
     private boolean checkItemBreak() {
         double rand = Math.random();
         return (rand < 0.5);
+    }
+    public boolean isGameOver() {
+        return gameOver;
     }
 }

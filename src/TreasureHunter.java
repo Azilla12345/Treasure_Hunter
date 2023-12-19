@@ -105,8 +105,10 @@ public class TreasureHunter {
             System.out.println();
             System.out.println(currentTown.getLatestNews());
             System.out.println("***");
-            System.out.println(hunter);
             System.out.println(currentTown);
+            System.out.println(hunter.getHunterName() + " has " + hunter.getGold() + " gold and " + hunter.getInventory());
+            System.out.println("Treasures found: " + hunter.getTreasure());
+            System.out.println("This little town is surround by " + currentTown.getTerrain());
             System.out.println("(B)uy something at the shop.");
             System.out.println("(S)ell something at the shop.");
             System.out.println("(M)ove on to a different town.");
@@ -137,6 +139,9 @@ public class TreasureHunter {
             currentTown.lookForTrouble();
         } else if (choice.equals("h")) {
             currentTown.huntForTreasure();
+            if (currentTown.isGameOver()) {
+
+            }
         }
         else if (choice.equals("x")) {
             System.out.println("Fare thee well, " + hunter.getHunterName() + "!");
