@@ -86,7 +86,11 @@ public class Town {
             if (!(easy)) {
                 if (checkItemBreak()) {
                     hunter.removeItemFromKit(item);
-                    printMessage += "\nUnfortunately, you lost your " + item;
+                    if (item.equals("horse") || (item.equals("rope"))) {
+                        printMessage += "\nUnfortunately, you lost your " + item;
+                    } else {
+                        printMessage += "\nUnfortunately, your " + item + " broke";
+                    }
                 }
             }
             hasDug = false;
