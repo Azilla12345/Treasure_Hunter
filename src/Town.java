@@ -16,6 +16,8 @@ public class Town {
     boolean gameOver = false;
     boolean easy = false;
 
+    boolean hasDug = false;
+
 
     /**
      * The Town Constructor takes in a shop and the surrounding terrain, but leaves the hunter as null until one arrives.
@@ -37,6 +39,7 @@ public class Town {
 
         // higher toughness = more likely to be a tough town
         toughTown = (Math.random() < toughness);
+        hasDug = false;
     }
 
     public String getLatestNews() {
@@ -51,6 +54,7 @@ public class Town {
     public void hunterArrives(Hunter hunter) {
         this.hunter = hunter;
         printMessage = "Welcome to town, " + hunter.getHunterName() + ".";
+        hasDug = false;
         int i = (int)((Math.random() *4));
         if (i == 1) {
             treasure = "crown";
@@ -85,7 +89,7 @@ public class Town {
                     printMessage += "\nUnfortunately, you lost your " + item;
                 }
             }
-
+            hasDug = false;
             return true;
         }
 
@@ -135,6 +139,26 @@ public class Town {
 
     public String toString() {
         return "This nice little town is surrounded by " + Colors.CYAN + terrain.getTerrainName() + Colors.RESET + ".";
+    }
+
+    public void dig() {
+        if ((!hasDug)) {
+            if (hunter.hasItemInKit("shovel")) {
+                int foundAnything = (int) (Math.random() * 2) + 1;
+                if (foundAnything == 1) {
+                    int goldFound = (int) (Math.random() * 20) + 1;
+                    System.out.println("You dug up " + goldFound + " gold!");
+                    hunter.changeGold(goldFound);
+                } else {
+                    System.out.println("You dug but only found dirt");
+                }
+                hasDug = true;
+            } else {
+                System.out.println("You can not dig without a shovel");
+            }
+        } else {
+            System.out.println("You already dug for gold in this town!");
+        }
     }
 
     public void huntForTreasure() {

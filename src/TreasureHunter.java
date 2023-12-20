@@ -71,11 +71,11 @@ public class TreasureHunter {
      * Creates a new town and adds the Hunter to it.
      */
     private void enterTown() {
-        double markdown = 0.25;
+        double markdown = 0.5;
         double toughness = 0.4;
         if (hardMode) {
             // in hard mode, you get less money back when you sell items
-            markdown = 0.5;
+            markdown = 0.25;
 
             // and the town is "tougher"
             toughness = 0.75;
@@ -84,7 +84,6 @@ public class TreasureHunter {
             hunter.changeGold(10);
             markdown = 0;
             toughness = 0.1;
-            currentTown.easy = true;
         }
 
         // note that we don't need to access the Shop object
@@ -117,6 +116,9 @@ public class TreasureHunter {
             System.out.println(currentTown.getLatestNews());
             System.out.println("***");
             System.out.println(currentTown);
+            if (easyMode) {
+                currentTown.easy = true;
+            }
             System.out.println(hunter.getHunterName() + " has " + hunter.getGold() + " gold and " + hunter.getInventory());
             System.out.println("Treasures found: " + hunter.getTreasure());
             System.out.println("This little town is surround by " + currentTown.getTerrain());
@@ -125,6 +127,7 @@ public class TreasureHunter {
             System.out.println("(M)ove on to a different town.");
             System.out.println("(L)ook for trouble!");
             System.out.println("(H)unt for treasure!");
+            System.out.println("(D)ig for gold!");
             System.out.println("Give up the hunt and e(X)it.");
             System.out.println();
             System.out.print("What's your next move? ");
@@ -154,6 +157,8 @@ public class TreasureHunter {
                 System.out.println("Game Over!");
                 System.exit(0);
             }
+        } else if (choice.equals("d")) {
+            currentTown.dig();
         }
         else if (choice.equals("x")) {
             System.out.println("Fare thee well, " + hunter.getHunterName() + "!");
