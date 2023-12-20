@@ -123,6 +123,9 @@ public class TreasureHunter {
             if (easyMode) {
                 currentTown.easy = true;
             }
+            if (samuraiMode) {
+                currentTown.samurai = true;
+            }
             System.out.println(hunter.getHunterName() + " has " + hunter.getGold() + " gold and " + hunter.getInventory());
             System.out.println("Treasures found: " + hunter.getTreasure());
             System.out.println("This little town is surround by " + currentTown.getTerrain());

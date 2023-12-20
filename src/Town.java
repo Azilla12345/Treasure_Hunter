@@ -18,6 +18,8 @@ public class Town {
 
     boolean hasDug = false;
 
+    boolean samurai = false;
+
 
     /**
      * The Town Constructor takes in a shop and the surrounding terrain, but leaves the hunter as null until one arrives.
@@ -29,7 +31,6 @@ public class Town {
         this.shop = shop;
         this.terrain = getNewTerrain();
         searched = false;
-
 
         // the hunter gets set using the hunterArrives method, which
         // gets called from a client class
@@ -107,7 +108,7 @@ public class Town {
      * @param choice If the user wants to buy or sell items at the shop.
      */
     public void enterShop(String choice) {
-        shop.enter(hunter, choice);
+        shop.enter(hunter, choice, samurai);
         printMessage = "You exit the shop";
     }
 
@@ -129,8 +130,13 @@ public class Town {
         } else {
             printMessage = Colors.RED + "You want trouble, stranger!  You got it!\nOof! Umph! Ow!\n";
             int goldDiff = (int) (Math.random() * 10) + 1;
-            if (Math.random() > noTroubleChance) {
-                printMessage += "Okay, stranger! You proved yer mettle. Here, take my gold.";
+            if ((Math.random() > noTroubleChance)||(hunter.hasItemInKit("sword"))) {
+                if (hunter.hasItemInKit("sword")) {
+                    printMessage += "the brawler, seeing your sword, realizes he picked a losing fight and gives you his gold";
+                } else {
+                    printMessage += "Okay, stranger! You proved yer mettle. Here, take my gold.";
+                }
+
                 printMessage += "\nYou won the brawl and receive " + goldDiff + " gold." + Colors.RESET;
                 hunter.changeGold(goldDiff);
             } else {

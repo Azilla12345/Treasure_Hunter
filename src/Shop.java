@@ -16,12 +16,15 @@ public class Shop {
     private static final int BOOTS_COST = 10;
     private static final int SHOVEL_COST = 8;
 
+    private static final int SWORD_COST = 0;
+
     // static variables
     private static final Scanner SCANNER = new Scanner(System.in);
 
     // instance variables
     private double markdown;
     private Hunter customer;
+
 
     /**
      * The Shop constructor takes in a markdown value and leaves customer null until one enters the shop.
@@ -33,30 +36,44 @@ public class Shop {
         customer = null; // is set in the enter method
     }
 
+
     /**
      * Method for entering the shop.
      *
      * @param hunter the Hunter entering the shop
      * @param buyOrSell String that determines if hunter is "B"uying or "S"elling
      */
-    public void enter(Hunter hunter, String buyOrSell) {
+    public void enter(Hunter hunter, String buyOrSell, Boolean isSamruai) {
         customer = hunter;
-
         if (buyOrSell.equals("b")) {
             System.out.println("Welcome to the shop! We have the finest wares in town.");
             System.out.println("Currently we have the following items:");
-            System.out.println(inventory());
+            System.out.println(inventory(isSamruai));
             System.out.print("What're you lookin' to buy? ");
             String item = SCANNER.nextLine().toLowerCase();
             int cost = checkMarketPrice(item, true);
-            if (cost == 0) {
-                System.out.println("We ain't got none of those.");
+            if ((cost == 0)) {
+                if ((item.equals("sword")) && (isSamruai)) {
+                    System.out.print("It'll cost you " + Colors.YELLOW + cost + Colors.RESET + " gold. Buy it (y/n)? ");
+                    String option = SCANNER.nextLine().toLowerCase();
+
+                    if (option.equals("y")) {
+                        buyItem(item);
+                    }
+                } else {
+                    System.out.println("We ain't got none of those.");
+                }
             } else {
                 System.out.print("It'll cost you " + Colors.YELLOW + cost + Colors.RESET + " gold. Buy it (y/n)? ");
                 String option = SCANNER.nextLine().toLowerCase();
 
                 if (option.equals("y")) {
-                    buyItem(item);
+                    if (hunter.hasItemInKit("sword")) {
+                        System.out.println("the sword intimidates the shopkeeper and he gives you the item for free");
+                        hunter.addItems(item);
+                    } else {
+                        buyItem(item);
+                    }
                 }
             }
         } else {
@@ -84,7 +101,7 @@ public class Shop {
      *
      * @return the string representing the shop's items available for purchase and their prices.
      */
-    public String inventory() {
+    public String inventory(boolean samurai) {
         String str = "Water: " + WATER_COST + " gold\n";
         str += "Rope: " + ROPE_COST + " gold\n";
         str += "Machete: " + MACHETE_COST + " gold\n";
@@ -92,7 +109,10 @@ public class Shop {
         str += "Boat: " + BOAT_COST + " gold\n";
         str += "Boots: " + BOOTS_COST + " gold\n";
         str += "Shovel: " + SHOVEL_COST + " gold\n";
-
+        if (samurai) {
+            str += "Sword: " + SWORD_COST + " gold\n";
+            customer.setSamurai(samurai);
+        }
         return str;
     }
 
